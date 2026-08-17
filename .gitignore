@@ -1,0 +1,8 @@
+/dist/
+/node_modules/
+*.log
+# Generated application output and local dependencies
+dist/
+node_modules/
+exports/
+*.local

@@ -1,0 +1,13 @@
+{
+  "name": "Ludere — Screenplay Instrument",
+  "short_name": "Ludere",
+  "description": "A local-first screenplay writing and story planning instrument.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#19151d",
+  "theme_color": "#4f394d",
+  "icons": [
+    { "src": "public/ludere-app-art.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" },
+    { "src": "public/ludere-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

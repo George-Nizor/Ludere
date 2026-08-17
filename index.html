@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4f394d">
+    <meta name="description" content="Ludere — a local-first screenplay writing instrument.">
+    <title>Untitled — Ludere</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="public/ludere-mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell" id="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Ludere">
+          <img src="public/ludere-mark.svg" alt="">
+          <span>Ludere</span>
+        </div>
+
+        <div class="view-switch" role="tablist" aria-label="Workspace view">
+          <button class="view-tab active" data-view="write" role="tab" aria-selected="true">Script</button>
+          <button class="view-tab" data-view="board" role="tab" aria-selected="false">Board</button>
+        </div>
+
+        <input id="document-title" class="document-title" type="text" maxlength="120" placeholder="Untitled screenplay" aria-label="Document title" autocomplete="off">
+
+        <nav class="toolbar" aria-label="Document actions">
+          <div class="format-group" aria-label="Inline formatting">
+            <button class="icon-button format-button" data-command="bold" data-label="Bold" title="Ctrl/Cmd+B" aria-label="Bold"><strong>B</strong></button>
+            <button class="icon-button format-button" data-command="italic" data-label="Italic" title="Ctrl/Cmd+I" aria-label="Italic"><em>I</em></button>
+            <button class="icon-button format-button" data-command="underline" data-label="Underline" title="Ctrl/Cmd+U" aria-label="Underline"><u>U</u></button>
+          </div>
+
+          <div class="menu-anchor">
+            <button id="element-button" class="element-button" aria-haspopup="menu" aria-expanded="false">
+              <span id="element-label">Scene heading</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+            <div id="element-menu" class="menu" role="menu"></div>
+          </div>
+
+          <button id="theme-button" class="icon-button theme-button" type="button" data-label="Dark mode" aria-label="Use dark mode" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <g class="theme-sun"><circle cx="12" cy="12" r="3.3"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/></g>
+              <path class="theme-moon" d="M19.2 15.2A7.7 7.7 0 0 1 8.8 4.8 8.2 8.2 0 1 0 19.2 15.2Z"/>
+            </svg>
+          </button>
+
+          <button id="sprint-button" class="sprint-button" data-label="Focus sprint" title="Forward-only writing sprint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2M8 3h8M12 3v2M18.4 7.6l1.4-1.4M4 13a8 8 0 1 0 2.3-5.7"/></svg>
+            <span id="sprint-label">Focus</span>
+          </button>
+
+          <button id="more-button" class="icon-button" data-label="Document" aria-haspopup="menu" aria-label="Document menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+          </button>
+          <div id="document-menu" class="menu document-menu" role="menu">
+            <button data-action="new">New <kbd>Ctrl N</kbd></button>
+            <button data-action="open">Open… <kbd>.ludere / .fdx</kbd></button>
+            <button data-action="save">Save <kbd>Ctrl S</kbd></button>
+            <div class="menu-label">Export</div>
+            <button data-action="title-page">Title page…</button>
+            <button data-action="fdx">Final Draft <kbd>.fdx</kbd></button>
+            <button data-action="text">Plain text <kbd>.txt</kbd></button>
+            <button data-action="html">Printable HTML</button>
+            <button data-action="print">Print / PDF <kbd>Ctrl P</kbd></button>
+            <div class="menu-label">Help</div>
+            <button data-action="help">Instructions <kbd>?</kbd></button>
+          </div>
+        </nav>
+      </header>
+
+      <main class="workspace write-view" id="workspace">
+        <aside class="scene-rail" id="scene-rail">
+          <div class="rail-heading">
+            <span>Scenes</span>
+            <span id="scene-count">0</span>
+          </div>
+          <div id="scene-list" class="scene-list"></div>
+          <button id="rail-toggle" class="rail-toggle" data-label="Hide scenes" aria-label="Hide scene navigator" aria-pressed="true">
+            <svg viewBox="0 0 24 24"><path d="m14 7-5 5 5 5"/></svg>
+          </button>
+        </aside>
+
+        <section class="script-scroll" id="script-view" aria-label="Screenplay editor">
+          <div class="script-page">
+            <div id="editor" class="editor" spellcheck="true"></div>
+          </div>
+          <div id="character-suggestions" class="character-suggestions" role="listbox"></div>
+        </section>
+
+        <section class="board-view" id="board-view" aria-label="Story board" hidden>
+          <div class="board-heading">
+            <div>
+              <span class="kicker">Story architecture</span>
+              <h1>Beat board</h1>
+            </div>
+            <div class="board-actions">
+              <button id="import-scenes-button" class="text-button">Bring in scenes</button>
+              <button id="add-beat-button" class="primary-button">New beat</button>
+            </div>
+          </div>
+          <div class="acts" id="acts"></div>
+        </section>
+      </main>
+
+      <footer class="statusbar">
+        <div id="save-status" class="save-status"><span class="status-dot"></span><span>Ready</span></div>
+        <div class="status-help"><kbd>Tab</kbd> element <span>·</span> <kbd>Enter</kbd> next <span>·</span> <kbd>Ctrl 1–8</kbd> direct</div>
+        <div id="document-stats">0 scenes · ~1 page</div>
+      </footer>
+    </div>
+
+    <div id="sprint-menu" class="sprint-menu" role="dialog" aria-label="Start focus sprint">
+      <span>Forward only</span>
+      <div>
+        <button data-minutes="5">5m</button>
+        <button data-minutes="15">15m</button>
+        <button data-minutes="30">30m</button>
+        <button data-minutes="60">60m</button>
+      </div>
+      <small>Earlier lines lock until time runs out.</small>
+    </div>
+
+    <dialog id="mode-dialog" class="modal mode-dialog">
+      <form method="dialog">
+        <span class="kicker">A fresh page</span>
+        <h2>What are you writing?</h2>
+        <div class="mode-grid">
+          <button type="button" data-mode="screenplay"><strong>Screenplay</strong><span>Industry layout and smart element flow.</span></button>
+          <button type="button" data-mode="free"><strong>Free writing</strong><span>A quiet page without screenplay rules.</span></button>
+        </div>
+        <button class="dialog-cancel" value="cancel">Keep current document</button>
+      </form>
+    </dialog>
+
+    <dialog id="title-dialog" class="modal">
+      <form method="dialog" id="title-form">
+        <div class="dialog-heading"><div><span class="kicker">Page one</span><h2>Title page</h2></div><button class="dialog-close" value="cancel" aria-label="Close">×</button></div>
+        <label class="check-row"><input id="title-enabled" type="checkbox"><span>Include a title page when printing</span></label>
+        <label>Written by<input id="title-author" type="text" maxlength="120"></label>
+        <label>Source line<input id="title-source" type="text" maxlength="180" placeholder="Based on the novel by…"></label>
+        <label>Contact<textarea id="title-contact" rows="3"></textarea></label>
+        <label>Draft and date<input id="title-draft" type="text" maxlength="120" placeholder="First draft — August 2026"></label>
+        <div class="dialog-actions"><button class="primary-button" value="save">Done</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="help-dialog" class="modal help-dialog">
+      <form method="dialog">
+        <div class="dialog-heading"><div><span class="kicker">Ludere handbook</span><h2>Write at the speed of thought.</h2></div><button class="dialog-close" value="close" aria-label="Close">×</button></div>
+        <div class="help-grid">
+          <section><h3>Natural flow</h3><p>Enter moves to the element that logically follows: scene to action, character to dialogue. An empty action line becomes a character cue; an empty dialogue line returns to action.</p></section>
+          <section><h3>Automatic structure</h3><p>INT. and EXT. become scene headings. A short uppercase name becomes a character when committed. Parentheses in dialogue become a parenthetical; CUT TO: becomes a transition.</p></section>
+          <section><h3>Fast formatting</h3><p>Tab and Shift+Tab cycle all eight elements. Ctrl/Cmd+1–8 selects one directly. Ctrl/Cmd+B, I and U apply emphasis without changing screenplay structure.</p></section>
+          <section><h3>Local and portable</h3><p>Your work autosaves on this device. Save a .ludere file for a portable copy, open Final Draft .fdx files, or export .fdx, plain text, printable HTML, and PDF.</p></section>
+          <section><h3>Focus sprint</h3><p>Choose a timer and earlier writing locks. You can only move forward until the sprint ends, even if the app reloads.</p></section>
+          <section><h3>Beat board</h3><p>Switch to Board to plan three acts. Create, reorder, recolor, and move beats between acts; pull scene headings from the current screenplay at any time.</p></section>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="modal confirm-dialog">
+      <form method="dialog">
+        <span class="kicker">Unsaved ideas are precious</span>
+        <h2 id="confirm-title">Start a new document?</h2>
+        <p id="confirm-message">Your current draft is autosaved, but a portable file is the safest archive.</p>
+        <div class="dialog-actions"><button value="cancel" class="text-button">Cancel</button><button value="confirm" class="danger-button">Continue</button></div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="print-root" class="print-root"></div>
+    <input id="file-input" type="file" accept=".ludere,.json,.fdx,application/json,text/xml" hidden>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

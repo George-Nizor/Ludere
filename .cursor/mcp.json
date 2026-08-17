@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ludere": {
+      "command": "node",
+      "args": ["mcp/index.mjs"],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}

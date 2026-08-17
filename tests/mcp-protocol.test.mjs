@@ -1,0 +1,51 @@
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+import { mkdtemp, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { createInterface } from 'node:readline';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+
+test('real stdio lifecycle is framed, silent, and handles malformed/unknown traffic', async (t) => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'ludere-mcp-protocol-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const projectPath = path.join(directory, 'protocol.ludere');
+  const child = spawn(process.execPath, ['mcp/index.mjs'], { cwd: root, stdio: ['pipe', 'pipe', 'pipe'] });
+  let stderr = '';
+  child.stderr.setEncoding('utf8');
+  child.stderr.on('data', (chunk) => { stderr += chunk; });
+  const lines = createInterface({ input: child.stdout, crlfDelay: Infinity });
+  const outputClosed = once(lines, 'close');
+  const responses = [];
+  lines.on('line', (line) => responses.push(JSON.parse(line)));
+  const send = (value) => child.stdin.write(`${typeof value === 'string' ? value : JSON.stringify(value)}\n`);
+
+  send('{broken-json');
+  send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: 'future-version', capabilities: {}, clientInfo: { name: 'e2e', version: '1' } } });
+  send({ jsonrpc: '2.0', method: 'notifications/initialized', params: {} });
+  send({ jsonrpc: '2.0', method: 'notifications/cancelled', params: { requestId: 99, reason: 'test' } });
+  send({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
+  send({ jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name: 'ludere_create_document', arguments: { projectPath, title: 'Protocol' } } });
+  send({ jsonrpc: '2.0', id: 4, method: 'tools/call', params: { name: 'missing_tool', arguments: {} } });
+  send({ jsonrpc: '2.0', id: 5, method: 'unknown/method', params: {} });
+  send({ jsonrpc: '2.0', id: 6, method: 'tools/call', params: { name: 'ludere_open_document', arguments: { projectPath, extra: true } } });
+  child.stdin.end();
+  const [exitCode] = await once(child, 'exit');
+  await outputClosed;
+  assert.equal(exitCode, 0);
+  assert.equal(stderr, '');
+  assert.equal(responses.length, 7, 'notifications and blank output must not add protocol messages');
+  assert.equal(responses[0].error.code, -32700);
+  assert.equal(responses[1].result.protocolVersion, '2025-11-25');
+  assert.equal(responses[2].result.tools.length, 18);
+  assert.equal(responses[3].result.structuredContent.summary.title, 'Protocol');
+  assert.equal(responses[4].result.isError, true);
+  assert.equal(responses[4].result.structuredContent.error.code, 'UNKNOWN_TOOL');
+  assert.equal(responses[5].error.code, -32601);
+  assert.equal(responses[6].result.isError, true);
+  assert.equal(responses[6].result.structuredContent.error.code, 'INVALID_ARGUMENTS');
+});

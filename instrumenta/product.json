@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "ludere",
+  "displayName": "Ludere",
+  "kind": "web",
+  "adapter": "web-static",
+  "versionSource": { "type": "package-json", "path": "package.json" },
+  "build": { "output": "dist", "command": "npm run build" },
+  "launch": {
+    "type": "web",
+    "root": "dist",
+    "port": 49322,
+    "entry": "index.html",
+    "health": "ludere"
+  },
+  "mcp": {
+    "timeoutSeconds": 120,
+    "entry": "mcp/index.mjs",
+    "cwd": ".",
+    "skill": "ai/skills/write-screenplays-with-ludere"
+  },
+  "assets": {
+    "mark": "public/ludere-mark.svg"
+  }
+}

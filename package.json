@@ -1,0 +1,31 @@
+{
+  "name": "ludere",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "A local-first screenplay writing instrument for the Instrumenta toolkit",
+  "bin": {
+    "ludere-mcp": "./mcp/index.mjs"
+  },
+  "files": [
+    ".cursor/mcp.json",
+    "app.js",
+    "core.mjs",
+    "index.html",
+    "manifest.webmanifest",
+    "mcp",
+    "public",
+    "service-worker.js",
+    "styles.css"
+  ],
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "build": "node scripts/build.mjs",
+    "mcp": "node mcp/index.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
