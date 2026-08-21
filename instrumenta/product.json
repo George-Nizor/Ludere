@@ -21,6 +21,6 @@
     "skill": "ai/skills/write-screenplays-with-ludere"
   },
   "assets": {
-    "mark": "public/ludere-mark.svg"
+    "mark": "public/ludere-mark.png"
   }
 }
