@@ -9,7 +9,7 @@ Screenplay formatting that autosaves as you write.
 Ludere is a local screenplay editor with a scene rail and a three-act beat board. The page follows
 Letter-sized screenplay margins in Courier; the surrounding app stays out of the way.
 
-Current version: **0.1.0**.
+Current version: **0.2.0**.
 
 ![Ludere script view in the light theme](docs/images/ludere-script.png)
 

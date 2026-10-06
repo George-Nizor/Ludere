@@ -88,7 +88,7 @@ export class LudereMcpServer {
         return rpcResult(id, {
           protocolVersion,
           capabilities: { tools: { listChanged: false } },
-          serverInfo: { name: 'ludere', title: 'Ludere screenplay projects', version: '0.1.0' },
+          serverInfo: { name: 'ludere', title: 'Ludere screenplay projects', version: '0.2.0' },
           instructions: 'Ludere tools edit explicit absolute .ludere files locally. Writes are atomic, exports never replace their source project, and new destinations refuse overwrite unless overwrite=true. Browser localStorage autosave is intentionally not modified; portable files use the same validated document schema.',
         });
       }

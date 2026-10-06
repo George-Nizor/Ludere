@@ -28,6 +28,6 @@ Instrumenta checkout's `brand/` folder; regenerate there and re-copy, never edit
 The screenplay page and editor (Courier Prime), the print layout, the page's own light/dark paper, and
 the beat colour names (`plum` is saved in documents, so it stays a data value that renders as the accent).
 
-## Deferred
+## README
 
-The README banner (`docs/images/ludere-banner.png`) is still v1; it goes with the README pass.
+The banner (`docs/images/ludere-banner.png`) is v2, rendered by Instrumenta's `brand/scripts/build-readme-banner.mjs`; the README screenshots show the v2 interface.
