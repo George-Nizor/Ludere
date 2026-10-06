@@ -1,19 +1,29 @@
 ![Ludere banner](docs/images/ludere-banner.png)
 
+<p align="center"><img src="docs/brand/ludere-animated.svg" alt="Ludere screenplay page" width="96" /></p>
+
 # Ludere
+
+Screenplay formatting that autosaves as you write.
 
 Ludere is a local screenplay editor with a scene rail and a three-act beat board. The page follows
 Letter-sized screenplay margins in Courier; the surrounding app stays out of the way.
 
 Current version: **0.1.0**.
 
+![Ludere script view in the light theme](docs/images/ludere-script.png)
+
+![Ludere beat board in the dark theme](docs/images/ludere-board.png)
+
 ## Open it
 
-Instrumenta can build and launch Ludere from the sibling workspace. For direct development:
+Instrumenta installs and launches Ludere. For direct development, from a checkout (Node.js 20 or newer):
 
 ```bash
 npm run dev
 ```
+
+The dev server listens on `http://127.0.0.1:4174`; set `PORT` to change it.
 
 Ludere is a static application with no runtime framework dependency. `npm run build` copies the
 packageable files to `dist/`.
@@ -78,9 +88,17 @@ See [the MCP guide](mcp/README.md) for the tool contracts and examples.
 
 ## Instrumenta integration
 
-[`instrumenta/product.json`](instrumenta/product.json) declares the optional `web-static` adapter.
-Instrumenta serves the built app on Ludere's registered loopback origin and opens it inside a
-sandboxed Electron window. Ludere remains an independent repository and can run without the launcher.
+[`instrumenta/product.json`](instrumenta/product.json) says Ludere is built as `web-static`; the
+launcher's catalog delivers it as `managed-web`. Instrumenta serves the built app on Ludere's
+registered loopback origin (port 49322) and opens it inside a sandboxed Electron window. A fresh
+install opens the copy baked into the installer; once Ludere publishes a release, the launcher
+installs and updates it from there. A `v<version>` tag publishes a release through
+[`.github/workflows/release.yml`](.github/workflows/release.yml), which calls Instrumenta's shared web
+product workflow, and the tag has to match `package.json`. Ludere remains an independent repository
+and can run without the launcher.
+
+The interface follows the Instrumenta brand v2; [`docs/brand/README.md`](docs/brand/README.md) lists
+what was copied from the brand and what stays Ludere's own (the Courier page above all).
 
 ## Verify a change
 
@@ -100,9 +118,18 @@ app.js           browser interaction
 core.mjs         screenplay and document rules
 styles.css       page and interface styling
 mcp/             local stdio server
+public/          icons, brand fonts and the web manifest assets
+docs/            banner, screenshots, brand notes
 tests/           domain and protocol coverage
 scripts/         static build
 instrumenta/     launcher manifest
 ```
 
 Ludere is MIT licensed.
+
+## Family
+
+Ludere is part of [Instrumenta](https://github.com/George-Nizor/Instrumenta), made by
+[Bonehead Labs](https://boneheadlabs.org), and follows the Instrumenta brand v2: a violet screenplay
+page, drawn as a freestanding object. The interface type (Fraunces, Commissioner, Spline Sans Mono) is
+SIL OFL 1.1, vendored in `public/fonts/brand` with its licences. Licence: MIT.
