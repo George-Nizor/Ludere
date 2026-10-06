@@ -4,8 +4,8 @@
   "description": "A local-first screenplay writing and story planning instrument.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#19151d",
-  "theme_color": "#4f394d",
+  "background_color": "#1A1223",
+  "theme_color": "#241930",
   "icons": [
     { "src": "public/ludere-app-art.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" },
     { "src": "public/ludere-mark.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
