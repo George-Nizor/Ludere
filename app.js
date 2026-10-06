@@ -973,3 +973,9 @@ window.__ludere = {
   exportPlainText: () => exportPlainText(script),
   setScript(value) { const valid = validateDocument(value); if (valid) { script = valid; renderEditor(); renderBoard(); refreshDerived(); } },
 };
+
+// Brand v2: swap the static logo for the inline icon so it can move on hover. The <img> stays as the fallback.
+if (window.InstrumentaIcons) {
+  const mark = document.getElementById('brand-mark');
+  if (mark) mark.innerHTML = window.InstrumentaIcons.render('ludere', { size: 34 });
+}
